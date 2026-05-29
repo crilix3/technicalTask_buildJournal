@@ -2,22 +2,53 @@ import pool from "../config/db.js";
 
 const getRecords = async (req, res) => {
   try {
+    let page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
+
+    if (page < 1) page = 1;
+    if (limit < 1) limit = 10;
+
+    const offset = (page - 1) * limit;
+
     const result = await pool.query(
       `
       SELECT
+          r.id AS Id,
 	        r.record_time AS Date,
 	        wv.value AS WorkView,
-	        r.unutvalue AS UnitValue,
+	        r.unutvalue AS VolumeOfWork,
+          u.value AS UnitValue,
 	        e.surname AS SureName,
 	        e.name AS Name,
-	        e.middlename AS MiddleName
+	        e.middlename AS MiddleName,
+          ro.value AS RoleValue,
+	        r.comment AS Comment
       FROM 
 	        public.records r
 	        INNER JOIN workview wv ON r.workviewid = wv.id
 	        INNER JOIN employers e ON r.employeid = e.id
+          INNER JOIN role ro ON r.roleid = ro.id
+          INNER JOIN unittypes u ON r.unutid = u.id
+          ORDER BY r.id LIMIT $1 OFFSET $2
       `,
+      [limit, offset],
     );
-    res.status(200).json(result.rows);
+    const countResult = await pool.query("SELECT COUNT(*) FROM public.records");
+
+    const totalItems = parseInt(countResult.rows[0].count);
+    const totalPages = Math.ceil(totalItems / limit);
+
+    res.status(200).json({
+      recordsList: result.rows,
+      pagination: {
+        page,
+        limit,
+        totalItems,
+        totalPages,
+        hasNext: page < totalPages,
+        hasPrev: page > 1,
+      },
+    });
   } catch (e) {
     console.log(e);
 
@@ -25,8 +56,7 @@ const getRecords = async (req, res) => {
   }
 };
 const createRecord = async (req, res) => {
-  const { timeStamp, wvId, empId, unitId, unitVal, comments, roleid } = req.body;
-  const dateObj = new Date(timeStamp);
+  const { wvId, empId, unitId, unitVal, comments, roleid } = req.body;
   try {
     const result = await pool.query(
       `
@@ -89,7 +119,7 @@ const deleteRecord = async (req, res) => {
 const getEmployers = async (req, res) => {
   try {
     const result = await pool.query(`SELECT * FROM public.employers`);
-    res.status(200).json(result.rows);
+    res.status(200).json({ employesList: result.rows });
   } catch (e) {
     console.log(e);
     res.status(500).json({ error: e.message });
@@ -99,7 +129,7 @@ const getEmployers = async (req, res) => {
 const getRole = async (req, res) => {
   try {
     const result = await pool.query(`SELECT * FROM public.role`);
-    res.status(200).json(result.rows);
+    res.status(200).json({ roleList: result.rows });
   } catch (e) {
     console.log(e);
     res.status(500).json({ error: e.message });
@@ -109,7 +139,7 @@ const getRole = async (req, res) => {
 const getCategoriesOfWork = async (req, res) => {
   try {
     const result = await pool.query(`SELECT * FROM public.category`);
-    res.status(200).json(result.rows);
+    res.status(200).json({ catOfWork: result.rows });
   } catch (e) {
     console.log(e);
     res.status(500).json({ error: e.message });
@@ -119,7 +149,7 @@ const getCategoriesOfWork = async (req, res) => {
 const getWorkView = async (req, res) => {
   try {
     const result = await pool.query(`SELECT * FROM public.workview`);
-    res.status(200).json(result.rows);
+    res.status(200).json({ workViewList: result.rows });
   } catch (e) {
     console.log(e);
     res.status(500).json({ error: e.message });
@@ -129,7 +159,7 @@ const getWorkView = async (req, res) => {
 const getUnitTypes = async (req, res) => {
   try {
     const result = await pool.query(`SELECT * FROM public.unittypes`);
-    res.status(200).json(result.rows);
+    res.status(200).json({ unitTypesList: result.rows });
   } catch (e) {
     console.log(e);
     res.status(500).json({ error: e.message, code: e.code });

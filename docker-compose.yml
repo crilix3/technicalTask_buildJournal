@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:17.10-alpine
+    environment:
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: gW)12rJcc6FpR3
+      POSTGRES_DB: build_journal
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backup.sql:/home/backup.sql
+    networks: 
+      - overlay_net
+  web:
+    image: myapp:latest
+    environment:
+      DB_PG_USER: postgres
+      DB_PG_HOST: postgres
+      DB_PG_DATABASE: build_journal
+      DB_PG_PASS: gW)12rJcc6FpR3
+      DB_PG_PORT: 5432
+    ports:
+      - "3020:3020"
+    networks:
+      - overlay_net
+volumes:
+  postgres_data:
+
+networks:
+  overlay_net:
+    driver: bridge   
