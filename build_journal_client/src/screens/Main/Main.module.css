@@ -1,0 +1,10 @@
+.main {
+  flex: 0 1 100%;
+}
+
+.main_container {
+  height: 100%;
+  max-width: calc(100% - 400px);
+  margin: 0 auto;
+  padding: 30px 0;
+}

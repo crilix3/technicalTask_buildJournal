@@ -1,0 +1,30 @@
+.recordEl {
+  display: grid;
+  grid-template-columns: 20px 100px 1fr 300px 1fr 100px 1fr 50px;
+  justify-items: center;
+  height: 60px;
+  border-bottom: 1px solid #1d2e5f;
+  align-items: center;
+}
+
+.actionsElem {
+  display: flex;
+  gap: 15px;
+}
+
+.updateElem,
+.deleteElem {
+  background: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.updateElem svg,
+.deleteElem svg {
+  width: 20px;
+  height: 20px;
+}
+
+.deleteElem svg {
+  color: #ff004c;
+}

@@ -1,2 +1,4 @@
 import Header from "./Header";
-export { Header };
+import RecordEl from "./RecordEl";
+import CreateRecord from "./CreateRecord";
+export { Header, RecordEl, CreateRecord };
