@@ -29,9 +29,11 @@ const getRecords = async (req, res) => {
 	        INNER JOIN employers e ON r.employeid = e.id
           INNER JOIN role ro ON r.roleid = ro.id
           INNER JOIN unittypes u ON r.unutid = u.id
-          ORDER BY r.id LIMIT $1 OFFSET $2
+      ORDER BY 
+          r.record_time DESC,
+          r.id LIMIT $1 OFFSET $2
       `,
-      [limit, offset],
+      [limit, offset]
     );
     const countResult = await pool.query("SELECT COUNT(*) FROM public.records");
 
@@ -46,8 +48,8 @@ const getRecords = async (req, res) => {
         totalItems,
         totalPages,
         hasNext: page < totalPages,
-        hasPrev: page > 1,
-      },
+        hasPrev: page > 1
+      }
     });
   } catch (e) {
     console.log(e);
@@ -72,7 +74,7 @@ const createRecord = async (req, res) => {
       VALUES ($1, $2, $3, $4, $5, $6) 
         RETURNING *
       `,
-      [wvId, empId, unitId, unitVal, comments, roleid],
+      [wvId, empId, unitId, unitVal, comments, roleid]
     );
     res.status(201).json({ message: "Record created !", statusCode: 201 });
   } catch (e) {
@@ -82,7 +84,7 @@ const createRecord = async (req, res) => {
   }
 };
 const updateRecords = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.query;
   const { wvId, empId, unitId, unitVal, comments, roleid } = req.body;
   try {
     const result = await pool.query(
@@ -97,7 +99,7 @@ const updateRecords = async (req, res) => {
             roleid = $6
         WHERE id = $7
       `,
-      [wvId, empId, unitId, unitVal, comments, roleid, id],
+      [wvId, empId, unitId, unitVal, comments, roleid, id]
     );
     res.status(200).json({ message: "Updated successfully", statusCode: 200 });
   } catch (e) {
@@ -105,8 +107,41 @@ const updateRecords = async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 };
+const getUpdateRecord = async (req, res) => {
+  const { id } = req.query;
+  try {
+    const result = await pool.query(
+      `
+        SELECT
+	        r.id AS Id,
+	        r.record_time AS Date,
+	        wv.id AS WorkViewId,
+	        r.unutvalue AS VolumeOfWork,
+	        u.id AS UnitId,
+	        e.id AS EmployeId,
+	        ro.id AS RoleId,
+	        r.comment AS Comment
+        FROM 
+	        public.records r
+	        INNER JOIN workview wv ON r.workviewid = wv.id
+	        INNER JOIN employers e ON r.employeid = e.id
+	        INNER JOIN role ro ON r.roleid = ro.id
+	        INNER JOIN unittypes u ON r.unutid = u.id
+        WHERE r.id = $1
+      `,
+      [id]
+    );
+    res.status(200).json(result.rows[0]);
+  } catch (e) {
+    console.log(e);
+
+    res.status(500).json({ error: e.message, code: e.code });
+  }
+};
 const deleteRecord = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.query;
+  console.log(id);
+
   try {
     const result = await pool.query(`DELETE FROM public.records WHERE id = $1`, [id]);
     res.status(200).json({ message: "Removed successfully", statusCode: 204 });
@@ -166,4 +201,4 @@ const getUnitTypes = async (req, res) => {
   }
 };
 
-export { getRecords, getEmployers, getRole, getCategoriesOfWork, getWorkView, getUnitTypes, createRecord, updateRecords, deleteRecord };
+export { getRecords, getEmployers, getRole, getCategoriesOfWork, getWorkView, getUnitTypes, createRecord, updateRecords, deleteRecord, getUpdateRecord };

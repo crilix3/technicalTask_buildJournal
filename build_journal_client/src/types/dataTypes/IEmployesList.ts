@@ -1,7 +1,5 @@
+import type { IEmployes } from "./IEmployes";
+
 export interface IEmployesList {
-  id: number;
-  name: string;
-  surname: string;
-  middlename: string;
-  roleid: string;
+  employesList: IEmployes[];
 }

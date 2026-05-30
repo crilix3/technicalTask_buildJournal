@@ -1,0 +1,70 @@
+.comentModal {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  background-color: #0000007a;
+}
+
+.comentModal_container {
+  height: 100%;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+  padding: 348px 0;
+}
+
+.comentModal_body {
+  width: 100%;
+  height: 100%;
+  background-color: #010f37;
+}
+
+.comentModal_body_content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  height: 100%;
+}
+
+.comentModal_heder {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 0 0 40px;
+  margin: 10px 0 0 0;
+}
+
+.comentModal_heder h1 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.close {
+  background: none;
+  border: none;
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+}
+
+.close svg {
+  color: #fff;
+  height: 24px;
+  width: 24px;
+}
+
+.comentModal_content {
+  flex: 1 1 100%;
+}
+
+.comment {
+  width: 100%;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}

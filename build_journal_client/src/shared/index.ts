@@ -1,4 +1,5 @@
 import Header from "./Header";
 import RecordEl from "./RecordEl";
 import CreateRecord from "./CreateRecord";
-export { Header, RecordEl, CreateRecord };
+import ComentModal from "./ComentModal";
+export { Header, RecordEl, CreateRecord, ComentModal };

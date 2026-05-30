@@ -5,6 +5,7 @@
   height: 60px;
   border-bottom: 1px solid #1d2e5f;
   align-items: center;
+  text-align: center;
 }
 
 .actionsElem {
@@ -27,4 +28,17 @@
 
 .deleteElem svg {
   color: #ff004c;
+}
+
+.commentsBtn {
+  color: #fff;
+  background: none;
+  cursor: pointer;
+}
+
+.overflowText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
 }

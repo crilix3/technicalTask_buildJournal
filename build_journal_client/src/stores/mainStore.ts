@@ -6,20 +6,40 @@ import type { IPagination } from "../types/IPagination";
 import type { IEmployesList } from "../types/dataTypes/IEmployesList";
 import type { IRoleList } from "../types/dataTypes/IRoleList";
 import type { ICatOfWorkList } from "../types/dataTypes/ICatOfWorkList";
+import type { IWorkViewList } from "../types/dataTypes/IWorkViewList";
+import type { IUnitTypesList } from "../types/dataTypes/IUnitTypesList";
+import type { IUpdateRecord } from "../types/dataTypes/IUpdateRecord";
 
 const INITIAL_DATA = { loading: loading.NONE, error: "", data: null };
 
 class MainStore {
   recordList: IGeneral<IRecord[] | null> = INITIAL_DATA;
-  employesList: IGeneral<IEmployesList[] | null> = INITIAL_DATA;
+  employesList: IGeneral<IEmployesList | null> = INITIAL_DATA;
   roleList: IGeneral<IRoleList | null> = INITIAL_DATA;
   categorieOfWorkList: IGeneral<ICatOfWorkList | null> = INITIAL_DATA;
+  workViewList: IGeneral<IWorkViewList | null> = INITIAL_DATA;
+  unitTypesList: IGeneral<IUnitTypesList | null> = INITIAL_DATA;
+  updateRecordData: IGeneral<IUpdateRecord | null> = INITIAL_DATA;
+
+  roleIdValue: number = 0;
+  employerIdValue: number = 0;
+  workViewId: number = 0;
+  categoryOfWorkId: number = 0;
+  unitValue: number = 0;
+  unitIdValue: number = 0;
+  comment: string = "";
 
   pagination: IPagination | null = null;
+  page: number = 1;
+
+  loadingCreatedData: boolean = false;
+
+  createRecordIsActive: string | null = null;
 
   constructor() {
     makeAutoObservable(this);
   }
+  //#region recordList
   setRecordListData(data: IRecord[] | null) {
     console.log(data);
 
@@ -31,39 +51,67 @@ class MainStore {
   setRecordListError(error: string) {
     this.recordList.error = error;
   }
+  //#endregion
 
-  setEmployesList(data: IEmployesList[] | null) {
-    this.employesList.data = data;
+  //#region updateData
+  setUpdateRecordData(data: IUpdateRecord | null) {
+    this.updateRecordData.data = data;
   }
-  setEmployesListLoading(loading: loading) {
-    this.employesList.loading = loading;
+  setUpdateRecordLoading(loading: loading) {
+    this.updateRecordData.loading = loading;
   }
-  setEmployesListError(error: string) {
-    this.employesList.error = error;
+  setUpdateRecordError(error: string) {
+    this.updateRecordData.error = error;
   }
-
-  setRoleList(data: IRoleList | null) {
-    this.roleList.data = data;
-  }
-  setRoleLoading(loading: loading) {
-    this.roleList.loading = loading;
-  }
-  setRoleError(error: string) {
-    this.roleList.error = error;
-  }
-
-  setCategorieOfWorkList(data: ICatOfWorkList | null) {
-    this.categorieOfWorkList.data = data;
-  }
-  setCategorieOfWorkLoading(loading: loading) {
-    this.categorieOfWorkList.loading = loading;
-  }
-  setCategorieOfWorkError(error: string) {
-    this.categorieOfWorkList.error = error;
-  }
+  //#endregion
 
   setPagination(pagination: IPagination | null) {
     this.pagination = pagination;
+  }
+
+  setCreateRecordIsActive(isActive: string | null) {
+    this.createRecordIsActive = isActive;
+  }
+
+  setEmployerIdValue(value: number) {
+    this.employerIdValue = value;
+  }
+
+  setRoleIdValue(value: number) {
+    this.roleIdValue = value;
+  }
+  setWorkViewId(value: number) {
+    this.workViewId = value;
+  }
+  setCategoryOfWorkId(value: number) {
+    this.categoryOfWorkId = value;
+  }
+  setUnitIdValue(value: number) {
+    this.unitIdValue = value;
+  }
+  setUnitValue(value: number) {
+    this.unitValue = value;
+  }
+  setComment(value: string) {
+    this.comment = value;
+  }
+
+  setUpdateValues(data: IUpdateRecord | null) {
+    if (!data) {
+      return ((this.roleIdValue = 0), (this.employerIdValue = 0), (this.workViewId = 0), (this.unitIdValue = 0), (this.unitValue = 0), (this.comment = ""));
+    }
+    this.roleIdValue = data.roleid;
+    this.employerIdValue = data.employeid;
+    this.workViewId = data.workviewid;
+    this.unitIdValue = data.unitid;
+    this.unitValue = data.volumeofwork;
+    this.comment = data.comment;
+  }
+
+  setPage(page: number) {
+    console.log(page);
+
+    this.page = page;
   }
 }
 

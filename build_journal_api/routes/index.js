@@ -1,11 +1,12 @@
 import express from "express";
 const router = express.Router();
-import { getRecords, getEmployers, getRole, getCategoriesOfWork, getWorkView, getUnitTypes, createRecord, updateRecords, deleteRecord } from "../controllers/buildJournalController.js";
+import { getRecords, getEmployers, getRole, getCategoriesOfWork, getWorkView, getUnitTypes, createRecord, updateRecords, deleteRecord, getUpdateRecord } from "../controllers/buildJournalController.js";
 
 router.get("/getRecords", getRecords);
+router.get("/getUpdateRecord", getUpdateRecord);
 router.post("/createRecord", createRecord);
-router.put("/updateRecords/:id", updateRecords);
-router.delete("/deleteRecord/:id", deleteRecord);
+router.put("/updateRecords", updateRecords);
+router.delete("/deleteRecord", deleteRecord);
 
 router.get("/getEmployers", getEmployers); //GET A LIST OF EMPLOYEES
 

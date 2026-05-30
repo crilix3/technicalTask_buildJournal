@@ -7,12 +7,12 @@ import { LIMIT_ELEM } from "../constants/dataConst";
 import type { IRecordData } from "../types/dataTypes/IRecordData";
 import type { IPagination } from "../types/IPagination";
 
-const getRecords = async (page: number) => {
+const getRecords = async () => {
   if (mainStore.recordList.loading === loading.LOADING) return;
   mainStore.setRecordListLoading(loading.LOADING);
   mainStore.setRecordListError("");
   try {
-    const res = await query.get(`getRecords?page=${page}&limit=${LIMIT_ELEM}`);
+    const res = await query.get(`getRecords?page=${mainStore.page}&limit=${LIMIT_ELEM}`);
     mainStore.setRecordListData((res.data as IRecordData).recordsList as IRecord[]);
     mainStore.setPagination((res.data as IRecordData).pagination as IPagination);
   } catch (e: unknown) {
