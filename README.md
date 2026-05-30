@@ -34,8 +34,8 @@
 
 # 1. Клонируем репозиторий
 
-git clone https://github.com/crilix3/technicalTask_buildJournal.git
-cd technicalTask_buildJournal
+- git clone https://github.com/crilix3/technicalTask_buildJournal.git
+- cd technicalTask_buildJournal
 
 # 2. Запускаем!
 
