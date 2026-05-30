@@ -1,4 +1,4 @@
-import { Header } from "./shared";
+import { ErrorHandler, Header } from "./shared";
 import { Main } from "./screens";
 import { useEffect } from "react";
 import getRecords from "./api/getRecords";
@@ -12,6 +12,7 @@ const App = observer(() => {
   return (
     <div className='wrapper'>
       <div className='container'>
+        <ErrorHandler />
         <Header />
         <Main />
       </div>

@@ -4,7 +4,10 @@ import mainStore from "../stores/mainStore";
 import getRecords from "./getRecords";
 
 const isValidPayload = () => {
-  if (!mainStore.roleIdValue || !mainStore.employerIdValue || !mainStore.workViewId || !mainStore.unitValue || !mainStore.unitIdValue) throw new Error("Введите все обязательные данные");
+  if (!mainStore.roleIdValue || !mainStore.employerIdValue || !mainStore.workViewId || !mainStore.unitValue || !mainStore.unitIdValue) {
+    mainStore.setCreateRecordError("Введите все обязательные данные");
+    throw new Error("Введите все обязательные данные");
+  }
 };
 
 const updateRecord = async () => {

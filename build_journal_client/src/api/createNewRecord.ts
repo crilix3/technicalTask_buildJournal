@@ -4,7 +4,10 @@ import { query } from "./instanseAxios";
 import getRecords from "./getRecords";
 
 const isValidPayload = () => {
-  if (!mainStore.roleIdValue || !mainStore.employerIdValue || !mainStore.workViewId || !mainStore.unitValue || !mainStore.unitIdValue) throw new Error("Введите все обязательные данные");
+  if (!mainStore.roleIdValue || !mainStore.employerIdValue || !mainStore.workViewId || !mainStore.unitValue || !mainStore.unitIdValue) {
+    mainStore.setCreateRecordError("Введите все обязательные данные");
+    throw new Error("Введите все обязательные данные");
+  }
 };
 
 const createNewRecord = async () => {
@@ -25,7 +28,7 @@ const createNewRecord = async () => {
     mainStore.setUpdateValues(null);
   } catch (e: unknown) {
     const error = e as AxiosError;
-    console.log(error.message);
+    console.log(error);
   }
 };
 

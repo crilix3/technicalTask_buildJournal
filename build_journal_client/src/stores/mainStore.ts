@@ -36,6 +36,8 @@ class MainStore {
 
   createRecordIsActive: string | null = null;
 
+  createRecordError: string = "";
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -109,9 +111,13 @@ class MainStore {
   }
 
   setPage(page: number) {
-    console.log(page);
-
     this.page = page;
+  }
+
+  setCreateRecordError(error: string) {
+    console.log(error);
+
+    this.createRecordError = error;
   }
 }
 
